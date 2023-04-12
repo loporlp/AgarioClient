@@ -9,6 +9,7 @@ namespace AgarioModels
 {
     public class Food : GameObject
     {
+        private string name { get; set; }
         public Food(string name, long id, Vector2 position, int color, float mass) : base(id, position, color, mass)
         {
             this.name = name;

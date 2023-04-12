@@ -1,5 +1,7 @@
-﻿using Communications;
+﻿using AgarioModels;
+using Communications;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Text.Json;
 
 namespace ClientGUI
 {
@@ -10,6 +12,7 @@ namespace ClientGUI
         public MainPage()
         {
             channel = new Networking(NullLogger.Instance, onConnect, onDisconnect, onMessage, '\n');
+
             InitializeComponent();
         }
 
@@ -24,6 +27,7 @@ namespace ClientGUI
             try
             {
                 channel.Connect(ServerAddress.Text, 11000);
+                channel.AwaitMessagesAsync();
                 LoginPage.IsVisible = false;    
             } catch (Exception ex)
             {
@@ -39,6 +43,17 @@ namespace ClientGUI
         void onMessage(Networking channel, string message)
         {
 
+            if(message.StartsWith(Protocols.CMD_Food))
+            {
+                Food[] food = JsonSerializer.Deserialize<Food[]>(message[Protocols.CMD_Food.Length..]!);
+
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine(food[i]);
+                }
+            }
+            
+            
         }
 
         void onDisconnect(Networking channel)
