@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace FileLogger
+namespace Logger
 {
     /// <summary>
     /// Author: Mason Sansom
