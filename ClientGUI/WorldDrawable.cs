@@ -9,11 +9,11 @@ namespace ClientGUI
         private readonly float screenHeight;
         private readonly float screenWidth;
 
-        public WorldDrawable(World world)
+        public WorldDrawable(World world, float width, float height)
         {
             this.world = world;
-            screenHeight = 500;
-            screenWidth = 500;
+            screenHeight = width;
+            screenWidth = height;
         }
 
         public void Draw(ICanvas canvas, RectF dirtyRect)

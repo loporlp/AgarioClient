@@ -17,13 +17,21 @@ namespace AgarioModels
 
         public void addPlayer(long id, Player player)
         {
+            if(players.ContainsKey(id))
+            {
+                players.Remove(id);
+            }
+
             players.Add(id, player);
         }
 
 
         public void addFood(long id, Food food)
         {
-            this.food.Add(id, food);    
+            if (!players.ContainsKey(id))
+            {
+                this.food.Add(id, food);
+            }
         }
 
 

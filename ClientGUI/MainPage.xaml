@@ -36,7 +36,12 @@
                 VerticalOptions="Center"
                 BackgroundColor="Blue"
                 HeightRequest="800"
-                WidthRequest="800" />
+                WidthRequest="800">
+                <GraphicsView.GestureRecognizers>
+                    <PointerGestureRecognizer PointerMoved="PointerMoved"/>
+                </GraphicsView.GestureRecognizers>
+                
+            </GraphicsView>
 
         </VerticalStackLayout>
         

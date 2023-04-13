@@ -166,7 +166,7 @@ namespace Communications
                         CheckForMessage(dataBacklog);
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     Disconnect();
                     return;

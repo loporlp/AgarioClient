@@ -1,6 +1,8 @@
 ﻿using AgarioModels;
 using Communications;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Timers;
 
@@ -12,6 +14,10 @@ namespace ClientGUI
         private bool connected;
         private Networking channel;
         private WorldDrawable draw;
+        private long playerID;
+        private Point? pos;
+        private readonly float screenWidth;
+        private readonly float screenHeight;
 
         private World world;
 
@@ -20,7 +26,8 @@ namespace ClientGUI
             channel = new Networking(NullLogger.Instance, onConnect, onDisconnect, onMessage, '\n');
             initialized = false;
             world = new World();
-
+            screenWidth = 500;
+            screenHeight = 500;
             InitializeComponent();
         }
 
@@ -35,7 +42,8 @@ namespace ClientGUI
             try
             {
                 channel.Connect(ServerAddress.Text, 11000);   
-            } catch (Exception ex)
+            } 
+            catch (Exception ex)
             {
                 ErrorMessage.Text = ex.Message;
             }
@@ -59,6 +67,7 @@ namespace ClientGUI
         void onMessage(Networking channel, string message)
         {
 
+            // Updating Food
             if(message.StartsWith(Protocols.CMD_Food))
             {
                 Food[] food = JsonSerializer.Deserialize<Food[]>(message[Protocols.CMD_Food.Length..]);
@@ -72,6 +81,21 @@ namespace ClientGUI
                 }
             }
 
+            // Removing Eaten Food
+            if (message.StartsWith(Protocols.CMD_Eaten_Food))
+            {
+                long[] food = JsonSerializer.Deserialize<long[]>(message[Protocols.CMD_Eaten_Food.Length..]);
+
+                foreach (long id in food)
+                {
+                    lock (world)
+                    {
+                        world.removeFood(id);
+                    }
+                }
+            }
+
+            // Updating Players
             if (message.StartsWith(Protocols.CMD_Update_Players))
             {
                 Player[] players = JsonSerializer.Deserialize<Player[]>(message[Protocols.CMD_Update_Players.Length..]);
@@ -85,6 +109,24 @@ namespace ClientGUI
                 }
             }
 
+            // Removing Dead Players
+            if (message.StartsWith(Protocols.CMD_Dead_Players))
+            {
+                int[] players = JsonSerializer.Deserialize<int[]>(message[Protocols.CMD_Dead_Players.Length..]);
+
+                foreach (int playerID in players)
+                {
+                    lock (world)
+                    {
+                        world.removePlayer(playerID);
+                    }
+                }
+            }
+
+            if (message.StartsWith(Protocols.CMD_Player_Object))
+            {
+                playerID = JsonSerializer.Deserialize<long>(message[Protocols.CMD_Player_Object.Length..]);
+            }
         }
 
         void onDisconnect(Networking channel)
@@ -116,17 +158,32 @@ namespace ClientGUI
 
         private void InitializeGameLogic()
         {
-            draw = new WorldDrawable(world);
+            draw = new WorldDrawable(world, screenWidth, screenHeight);
             PlaySurface.Drawable = draw;
             Window.Width = 500;
-            System.Timers.Timer timer = new System.Timers.Timer(100);
-            timer.Elapsed += GameStep;
+            var timer = Dispatcher.CreateTimer();
+            timer.Interval = new TimeSpan(30);
+            timer.Tick += GameStep;
             timer.Start();
         }
 
-        private void GameStep(object state, ElapsedEventArgs e)
+        private void GameStep(object state, EventArgs e)
         {
+            if(pos != null && world.players.ContainsKey(playerID))
+            {
+                float xToMove = (float)(pos.Value.X / screenWidth) * world.width;
+                float yToMove = (float)(pos.Value.Y / screenHeight) * world.height;
+
+                channel.Send(String.Format(Protocols.CMD_Move, (int)xToMove, (int)yToMove));
+            }
+            Debug.WriteLine(world.players[playerID].X);
             PlaySurface.Invalidate();
+        }
+
+        private void PointerMoved(object state, PointerEventArgs e)
+        {
+            pos = e.GetPosition(PlaySurface);
+           // Debug.WriteLine($"Pointer at {pos.Value.X},{pos.Value.Y}");
         }
 
     }
