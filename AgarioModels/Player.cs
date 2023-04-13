@@ -11,9 +11,9 @@ namespace AgarioModels
     {
 
         private string name;
-        public Player(string name, long id, Vector2 position, int color, float mass): base(id, position, color, mass)
+        public Player(string Name, long ID, float X, float Y, int ARGBColor, float Mass): base(ID, new Vector2(X, Y), ARGBColor, Mass)
         {
-            this.name = name;
+            this.name = Name;
         }
 
 

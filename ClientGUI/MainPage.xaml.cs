@@ -63,11 +63,26 @@ namespace ClientGUI
 
                 foreach(Food item in food) 
                 {
-                    world.addFood(item.ID, item);
+                    lock (world)
+                    {
+                        world.addFood(item.ID, item);
+                    }
                 }
             }
-            
-            
+
+            if (message.StartsWith(Protocols.CMD_Update_Players))
+            {
+                Player[] players = JsonSerializer.Deserialize<Player[]>(message[Protocols.CMD_Update_Players.Length..]);
+
+                foreach (Player player in players)
+                {
+                    lock (world)
+                    {
+                        world.addPlayer(player.ID, player);
+                    }
+                }
+            }
+
         }
 
         void onDisconnect(Networking channel)

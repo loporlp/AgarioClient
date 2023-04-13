@@ -163,7 +163,7 @@ namespace Communications
 
                         logger.LogInformation($"  Received {total} new bytes for a total of {dataBacklog.Length}.");
 
-                        this.CheckForMessage(dataBacklog);
+                        CheckForMessage(dataBacklog);
                     }
                 }
                 catch (Exception)
@@ -198,7 +198,7 @@ namespace Communications
 
 
                 allData = data.ToString();
-                terminator_position = allData.IndexOf(".");
+                terminator_position = allData.IndexOf(terminationCharacter);
             }
 
             if (!foundOneMessage)
