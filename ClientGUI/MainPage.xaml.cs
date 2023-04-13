@@ -52,6 +52,8 @@ namespace ClientGUI
                 initialized = true;
                 InitializeGameLogic();
             }
+
+            channel.Send(String.Format(Protocols.CMD_Start_Game, PlayerName.Text));
         }
 
         void onMessage(Networking channel, string message)
@@ -107,6 +109,8 @@ namespace ClientGUI
                     initialized = true;
                     InitializeGameLogic();
                 }
+
+
             }
         }
 
