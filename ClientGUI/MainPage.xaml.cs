@@ -2,16 +2,24 @@
 using Communications;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Text.Json;
+using System.Timers;
 
 namespace ClientGUI
 {
     public partial class MainPage : ContentPage
     {
+        private bool initialized;
+        private bool connected;
         private Networking channel;
+        private WorldDrawable draw;
+
+        private World world;
 
         public MainPage()
         {
             channel = new Networking(NullLogger.Instance, onConnect, onDisconnect, onMessage, '\n');
+            initialized = false;
+            world = new World();
 
             InitializeComponent();
         }
@@ -26,9 +34,7 @@ namespace ClientGUI
 
             try
             {
-                channel.Connect(ServerAddress.Text, 11000);
-                channel.AwaitMessagesAsync();
-                LoginPage.IsVisible = false;    
+                channel.Connect(ServerAddress.Text, 11000);   
             } catch (Exception ex)
             {
                 ErrorMessage.Text = ex.Message;
@@ -37,7 +43,15 @@ namespace ClientGUI
 
         void onConnect(Networking channel)
         {
-
+            connected = true;
+            channel.AwaitMessagesAsync();
+            LoginPage.IsVisible = false;
+            Game.IsVisible = true;
+            if (!initialized)
+            {
+                initialized = true;
+                InitializeGameLogic();
+            }
         }
 
         void onMessage(Networking channel, string message)
@@ -45,11 +59,11 @@ namespace ClientGUI
 
             if(message.StartsWith(Protocols.CMD_Food))
             {
-                Food[] food = JsonSerializer.Deserialize<Food[]>(message[Protocols.CMD_Food.Length..]!);
+                Food[] food = JsonSerializer.Deserialize<Food[]>(message[Protocols.CMD_Food.Length..]);
 
-                for (int i = 0; i < 10; i++)
+                foreach(Food item in food) 
                 {
-                    Console.WriteLine(food[i]);
+                    world.addFood(item.ID, item);
                 }
             }
             
@@ -59,6 +73,41 @@ namespace ClientGUI
         void onDisconnect(Networking channel)
         {
 
+        }
+
+
+        /// <summary>
+        ///    Called when the window is resized.  
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            if (connected)
+            {
+                base.OnSizeAllocated(width, height);
+
+                if (!initialized)
+                {
+                    initialized = true;
+                    InitializeGameLogic();
+                }
+            }
+        }
+
+        private void InitializeGameLogic()
+        {
+            draw = new WorldDrawable(world);
+            PlaySurface.Drawable = draw;
+            Window.Width = 500;
+            System.Timers.Timer timer = new System.Timers.Timer(100);
+            timer.Elapsed += GameStep;
+            timer.Start();
+        }
+
+        private void GameStep(object state, ElapsedEventArgs e)
+        {
+            PlaySurface.Invalidate();
         }
 
     }

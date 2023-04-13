@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,18 +9,11 @@ namespace AgarioModels
 {
     public class World
     {
-        private readonly int width = 5000;
-        private readonly int height = 5000;
+        public readonly int width = 5000;
+        public readonly int height = 5000;
         //using ID to map the players and food
-        private Dictionary<long, Player> players = new();
-        private Dictionary<long, Food> food = new();
-       
-
-        public World(int width, int height)
-        {
-            this.width = width;
-            this.height = height;   
-        }
+        public Dictionary<long, Player> players = new();
+        public Dictionary<long, Food> food = new();
 
         public void addPlayer(long id, Player player)
         {
@@ -47,10 +41,6 @@ namespace AgarioModels
                  food.Remove(id);
             }
         }
-
-
-        
-
 
     }
 }

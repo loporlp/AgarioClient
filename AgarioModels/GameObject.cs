@@ -22,11 +22,19 @@ namespace AgarioModels
             this.mass = mass;
         }
 
-        public long Id { get { return id; } }
+        public long ID { get { return id; } set { id = value; } }
 
-        public Vector2 Position { get { return position; } }
+        public Vector2 Position { get { return position; } set { position = value; } }
 
-        public float Mass { get { return mass; } } 
+        public float Mass { get { return mass; } set { mass = value;} } 
+
+        public float X { get { return position.X; } }
+
+        public float Y { get { return position.Y; } }
+
+        public int ARGBColor { get { return color; } set { color = value; } }
+
+
 
         public float Radius { get { return (float)Math.Sqrt(mass / (Math.PI)); } }
 

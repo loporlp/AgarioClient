@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace AgarioModels
 {
     public class Food : GameObject
     {
-        private string name { get; set; }
-        public Food(string name, long id, Vector2 position, int color, float mass) : base(id, position, color, mass)
+        [JsonConstructor]
+        public Food( float X, float Y, int ARGBColor, long ID, float Mass) : base(ID, new Vector2(X, Y), ARGBColor, Mass)
         {
-            this.name = name;
+            
         }
 
        
