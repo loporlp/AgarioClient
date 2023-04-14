@@ -137,7 +137,7 @@ namespace ClientGUI
 
         private void OnRestart(object sender, EventArgs e)
         {
-
+            //add restart implementation here 
         }
 
 
