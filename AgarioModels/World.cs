@@ -1,5 +1,4 @@
-﻿
-namespace AgarioModels
+﻿namespace AgarioModels
 {
     /// <summary>
     /// Authors: Mason Sansom and Druv Rachakonda
