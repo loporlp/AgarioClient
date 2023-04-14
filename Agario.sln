@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communications", "Communica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logger", "Logger\Logger.csproj", "{32CEBE5A-761A-483E-9D5B-66297AF063A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowardAgarioStepOne", "TowardAgarioStepOne\TowardAgarioStepOne.csproj", "{DDD2D5C3-2508-4E45-A473-05EC5F7BB57E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TowardAgarioStepOne", "TowardAgarioStepOne\TowardAgarioStepOne.csproj", "{DDD2D5C3-2508-4E45-A473-05EC5F7BB57E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8BABC60F-99AF-455B-8E79-5FB222830811}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
