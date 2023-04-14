@@ -50,5 +50,12 @@ namespace AgarioModels
             }
         }
 
+
+        public Player GetPlayer(long id)
+        {
+            Player player = players[id];
+            return player;
+        }
+
     }
 }

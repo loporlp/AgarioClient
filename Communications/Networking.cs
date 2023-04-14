@@ -7,13 +7,13 @@ namespace Communications
 {
     /// <summary>
     /// Author: Mason Sansom
-    /// Partner: Druv Rachakonda
+    /// Partner: Dhruv Rachakonda
     /// Date: 4-April-2023
     /// Course:    CS 3500, University of Utah, School of Computing
     /// Copyright: CS 3500 and Mason Sansom - This work may not 
     ///            be copied for use in Academic Coursework.
     ///
-    /// We, Mason Sansom and Druve Rachakonda, certify that we wrote this code from scratch and
+    /// We, Mason Sansom and Dhruv Rachakonda, certify that we wrote this code from scratch and
     /// All references used in the completion of the assignments are cited 
     /// in the README file.
     ///
@@ -77,7 +77,7 @@ namespace Communications
                     return;
                 }
 
-                tcpClient = new TcpClient(host, port);
+              tcpClient = new TcpClient(host, port);
                 onConnect(this);
             }
             catch (Exception e)
@@ -166,7 +166,7 @@ namespace Communications
                         CheckForMessage(dataBacklog);
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Disconnect();
                     return;

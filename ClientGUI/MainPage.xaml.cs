@@ -33,7 +33,7 @@ namespace ClientGUI
 
         private void ConnectToServer(object sender, EventArgs e)
         {
-            if(PlayerName.Text == null)
+            if (PlayerName.Text == null)
             {
                 ErrorMessage.Text = "PLEASE ENTER NAME";
                 return;
@@ -41,8 +41,8 @@ namespace ClientGUI
 
             try
             {
-                channel.Connect(ServerAddress.Text, 11000);   
-            } 
+                channel.Connect(ServerAddress.Text, 11000);
+            }
             catch (Exception ex)
             {
                 ErrorMessage.Text = ex.Message;
@@ -68,11 +68,11 @@ namespace ClientGUI
         {
 
             // Updating Food
-            if(message.StartsWith(Protocols.CMD_Food))
+            if (message.StartsWith(Protocols.CMD_Food))
             {
                 Food[] food = JsonSerializer.Deserialize<Food[]>(message[Protocols.CMD_Food.Length..]);
 
-                foreach(Food item in food) 
+                foreach (Food item in food)
                 {
                     lock (world)
                     {
@@ -126,6 +126,7 @@ namespace ClientGUI
             if (message.StartsWith(Protocols.CMD_Player_Object))
             {
                 playerID = JsonSerializer.Deserialize<long>(message[Protocols.CMD_Player_Object.Length..]);
+                draw.setPlayer(playerID);
             }
         }
 
@@ -160,7 +161,7 @@ namespace ClientGUI
         {
             draw = new WorldDrawable(world, screenWidth, screenHeight);
             PlaySurface.Drawable = draw;
-            Window.Width = 500;
+            Window.Width = 1000;
             var timer = Dispatcher.CreateTimer();
             timer.Interval = new TimeSpan(30);
             timer.Tick += GameStep;
@@ -169,21 +170,20 @@ namespace ClientGUI
 
         private void GameStep(object state, EventArgs e)
         {
-            if(pos != null && world.players.ContainsKey(playerID))
+            if (pos != null && world.players.ContainsKey(playerID))
             {
                 float xToMove = (float)(pos.Value.X / screenWidth) * world.width;
                 float yToMove = (float)(pos.Value.Y / screenHeight) * world.height;
 
                 channel.Send(String.Format(Protocols.CMD_Move, (int)xToMove, (int)yToMove));
             }
-            Debug.WriteLine(world.players[playerID].X);
             PlaySurface.Invalidate();
         }
 
         private void PointerMoved(object state, PointerEventArgs e)
         {
             pos = e.GetPosition(PlaySurface);
-           // Debug.WriteLine($"Pointer at {pos.Value.X},{pos.Value.Y}");
+            // Debug.WriteLine($"Pointer at {pos.Value.X},{pos.Value.Y}");
         }
 
     }
