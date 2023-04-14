@@ -135,6 +135,11 @@ namespace ClientGUI
 
         }
 
+        private void OnRestart(object sender, EventArgs e)
+        {
+
+        }
+
 
         /// <summary>
         ///    Called when the window is resized.  
@@ -170,6 +175,12 @@ namespace ClientGUI
 
         private void GameStep(object state, EventArgs e)
         {
+
+            if (!world.alive)
+            {
+                restart.IsVisible = true;
+            }
+
             if (pos != null && world.players.ContainsKey(playerID))
             {
                 float xToMove = (float)(pos.Value.X / screenWidth) * world.width;

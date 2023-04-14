@@ -11,6 +11,7 @@ namespace AgarioModels
     {
         public readonly int width = 5000;
         public readonly int height = 5000;
+        public bool alive = true;
         //using ID to map the players and food
         public Dictionary<long, Player> players = new();
         public Dictionary<long, Food> food = new();

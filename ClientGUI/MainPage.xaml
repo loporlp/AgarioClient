@@ -41,6 +41,9 @@
                 
             </GraphicsView>
 
+
+            <Button x:Name="restart" Pressed="OnRestart" IsVisible="False" WidthRequest="300" Text="Restart"></Button>
+            
         </VerticalStackLayout>
         
     </StackLayout>

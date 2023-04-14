@@ -32,9 +32,18 @@ namespace ClientGUI
                 return;
             }
 
-            this.activePlayer = world.players[playerID];
+            try
+            {
+                this.activePlayer = world.players[playerID];
+            }
 
-           
+            catch(KeyNotFoundException)
+            {
+                world.alive = false;
+            }
+
+
+
 
             canvas.FillColor = Color.FromInt(activePlayer.ARGBColor);
             canvas.FillCircle(250-activePlayer.Radius, 250-activePlayer.Radius, activePlayer.Mass/10);
