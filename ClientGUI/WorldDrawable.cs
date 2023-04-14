@@ -3,6 +3,20 @@ using System.Numerics;
 
 namespace ClientGUI
 {
+    /// <summary>
+    /// Authors: Mason Sansom and Druv Rachakonda
+    /// Date: 10-April-2023
+    /// Course:    CS 3500, University of Utah, School of Computing
+    /// Copyright: CS 3500, Mason Sansom and Druv Rachakonda - This work may not 
+    ///            be copied for use in Academic Coursework.
+    ///
+    /// We, Mason Sansom and Druve Rachakonda, certify that we wrote this code from scratch and
+    /// All references used in the completion of the assignments are cited 
+    /// in the README file.
+    ///
+    /// File Contents
+    /// Helper class to help draw the world in the Graphics view
+    /// </summary>
     public class WorldDrawable : IDrawable
     {
         private World world;
@@ -16,6 +30,11 @@ namespace ClientGUI
             screenWidth = height;
         }
 
+        /// <summary>
+        ///     Draws all food and players when invalidated
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <param name="dirtyRect"></param>
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
             canvas.FillColor = Colors.DarkBlue;
@@ -47,6 +66,12 @@ namespace ClientGUI
             
         }
 
+        /// <summary>
+        ///     Helper method to convert world coordinates to screen coordinates
+        /// </summary>
+        /// <param name="X"> x position </param>
+        /// <param name="Y"> y position </param>
+        /// <returns></returns>
         public Vector2 getScreenPosition(float X, float Y)
         {
             float screenX = (X / world.width) * screenWidth;

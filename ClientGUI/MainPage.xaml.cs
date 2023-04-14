@@ -1,13 +1,26 @@
 ﻿using AgarioModels;
 using Communications;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Maui.Controls.PlatformConfiguration;
-using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using System.Timers;
 
 namespace ClientGUI
 {
+    /// <summary>
+    /// Authors: Mason Sansom and Druv Rachakonda
+    /// Date: 10-April-2023
+    /// Course:    CS 3500, University of Utah, School of Computing
+    /// Copyright: CS 3500, Mason Sansom and Druv Rachakonda - This work may not 
+    ///            be copied for use in Academic Coursework.
+    ///
+    /// We, Mason Sansom and Druve Rachakonda, certify that we wrote this code from scratch and
+    /// All references used in the completion of the assignments are cited 
+    /// in the README file.
+    ///
+    /// File Contents
+    /// This File contains the contents of the Client GUI supports a login page
+    /// that allows the User to enter a name and IP and connects to an agario server
+    /// once connected displays the game and supports moving with the mouse
+    /// </summary>
     public partial class MainPage : ContentPage
     {
         private bool initialized;
@@ -18,12 +31,13 @@ namespace ClientGUI
         private Point? pos;
         private readonly float screenWidth;
         private readonly float screenHeight;
-
+        private readonly ILogger<MainPage> _logger;
         private World world;
 
-        public MainPage()
+        public MainPage(ILogger<MainPage> logger)
         {
-            channel = new Networking(NullLogger.Instance, onConnect, onDisconnect, onMessage, '\n');
+            _logger = logger;
+            channel = new Networking(_logger, onConnect, onDisconnect, onMessage, '\n');
             initialized = false;
             world = new World();
             screenWidth = 500;
@@ -31,6 +45,11 @@ namespace ClientGUI
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     Button that connects user to game
+        /// </summary>
+        /// <param name="sender"> unused </param>
+        /// <param name="e"> unused </param>
         private void ConnectToServer(object sender, EventArgs e)
         {
             if(PlayerName.Text == null)
@@ -49,6 +68,11 @@ namespace ClientGUI
             }
         }
 
+        /// <summary>
+        ///     Called when client connects to game
+        ///     brings up the game page and hides the login page
+        /// </summary>
+        /// <param name="channel"> channel connected to </param>
         void onConnect(Networking channel)
         {
             connected = true;
@@ -64,6 +88,12 @@ namespace ClientGUI
             channel.Send(String.Format(Protocols.CMD_Start_Game, PlayerName.Text));
         }
 
+        /// <summary>
+        ///     Take messages from server and do 
+        ///     what command is ordering according to Protocol.cs
+        /// </summary>
+        /// <param name="channel"> Networking object sending message </param>
+        /// <param name="message"> message sent </param>
         void onMessage(Networking channel, string message)
         {
 
@@ -129,6 +159,10 @@ namespace ClientGUI
             }
         }
 
+        /// <summary>
+        ///     Called when the client disconnects from the game
+        /// </summary>
+        /// <param name="channel"></param>
         void onDisconnect(Networking channel)
         {
 
@@ -156,17 +190,31 @@ namespace ClientGUI
             }
         }
 
+        /// <summary>
+        ///     Starts the timer and sets the world 
+        /// </summary>
         private void InitializeGameLogic()
         {
+            _logger.LogInformation("Game Logic Has Begun Running");
+
+            // Create the world
             draw = new WorldDrawable(world, screenWidth, screenHeight);
             PlaySurface.Drawable = draw;
             Window.Width = 500;
+
+            // Create and start timer
             var timer = Dispatcher.CreateTimer();
             timer.Interval = new TimeSpan(30);
             timer.Tick += GameStep;
             timer.Start();
         }
 
+        /// <summary>
+        ///     Method called 30 times per second to handle
+        ///     redrawing the game screen and updating movement of player
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="e"></param>
         private void GameStep(object state, EventArgs e)
         {
             if(pos != null && world.players.ContainsKey(playerID))
@@ -176,14 +224,18 @@ namespace ClientGUI
 
                 channel.Send(String.Format(Protocols.CMD_Move, (int)xToMove, (int)yToMove));
             }
-            Debug.WriteLine(world.players[playerID].X);
             PlaySurface.Invalidate();
         }
 
+        /// <summary>
+        ///     Updates when the mouse is moved and logs its location
+        /// </summary>
+        /// <param name="state"> unused </param>
+        /// <param name="e"> used to get the pointer posistion </param>
         private void PointerMoved(object state, PointerEventArgs e)
         {
             pos = e.GetPosition(PlaySurface);
-           // Debug.WriteLine($"Pointer at {pos.Value.X},{pos.Value.Y}");
+           _logger.LogTrace($"Pointer at {pos.Value.X},{pos.Value.Y}");
         }
 
     }

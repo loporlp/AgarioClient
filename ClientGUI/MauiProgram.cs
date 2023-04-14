@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Logger;
+using Microsoft.Extensions.Logging;
 
 namespace ClientGUI
 {
@@ -13,11 +14,11 @@ namespace ClientGUI
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
-
-#if DEBUG
-		builder.Logging.AddDebug();
-#endif
+                }).Services.AddLogging(configure =>
+                {
+                    configure.AddDebug();
+                    configure.AddProvider(new CustomFileLogProvider());
+                }).AddTransient<MainPage>();
 
             return builder.Build();
         }
