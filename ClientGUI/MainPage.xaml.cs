@@ -52,7 +52,7 @@ namespace ClientGUI
         /// <param name="e"> unused </param>
         private void ConnectToServer(object sender, EventArgs e)
         {
-            if(PlayerName.Text == null)
+            if (PlayerName.Text == null)
             {
                 ErrorMessage.Text = "PLEASE ENTER NAME";
                 return;
@@ -60,8 +60,8 @@ namespace ClientGUI
 
             try
             {
-                channel.Connect(ServerAddress.Text, 11000);   
-            } 
+                channel.Connect(ServerAddress.Text, 11000);
+            }
             catch (Exception ex)
             {
                 ErrorMessage.Text = ex.Message;
@@ -98,11 +98,11 @@ namespace ClientGUI
         {
 
             // Updating Food
-            if(message.StartsWith(Protocols.CMD_Food))
+            if (message.StartsWith(Protocols.CMD_Food))
             {
                 Food[] food = JsonSerializer.Deserialize<Food[]>(message[Protocols.CMD_Food.Length..]);
 
-                foreach(Food item in food) 
+                foreach (Food item in food)
                 {
                     lock (world)
                     {
@@ -156,6 +156,7 @@ namespace ClientGUI
             if (message.StartsWith(Protocols.CMD_Player_Object))
             {
                 playerID = JsonSerializer.Deserialize<long>(message[Protocols.CMD_Player_Object.Length..]);
+                draw.setPlayer(playerID);
             }
         }
 
@@ -166,6 +167,11 @@ namespace ClientGUI
         void onDisconnect(Networking channel)
         {
 
+        }
+
+        private void OnRestart(object sender, EventArgs e)
+        {
+            //add restart implementation here 
         }
 
 
@@ -200,9 +206,7 @@ namespace ClientGUI
             // Create the world
             draw = new WorldDrawable(world, screenWidth, screenHeight);
             PlaySurface.Drawable = draw;
-            Window.Width = 500;
-
-            // Create and start timer
+            Window.Width = 1000;
             var timer = Dispatcher.CreateTimer();
             timer.Interval = new TimeSpan(30);
             timer.Tick += GameStep;
@@ -217,7 +221,13 @@ namespace ClientGUI
         /// <param name="e"></param>
         private void GameStep(object state, EventArgs e)
         {
-            if(pos != null && world.players.ContainsKey(playerID))
+
+            if (!world.alive)
+            {
+                restart.IsVisible = true;
+            }
+
+            if (pos != null && world.players.ContainsKey(playerID))
             {
                 float xToMove = (float)(pos.Value.X / screenWidth) * world.width;
                 float yToMove = (float)(pos.Value.Y / screenHeight) * world.height;
