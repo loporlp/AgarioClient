@@ -16,15 +16,14 @@ namespace AgarioModels
     /// File Contents
     /// Represents Player game object
     /// </summary>
-    public class Player: GameObject
+    public class Player : GameObject
     {
 
         private string name;
-        public Player(string Name, long ID, float X, float Y, int ARGBColor, float Mass): base(ID, new Vector2(X, Y), ARGBColor, Mass)
+        public Player(string Name, long ID, float X, float Y, int ARGBColor, float Mass) : base(ID, new Vector2(X, Y), ARGBColor, Mass)
         {
             this.name = Name;
         }
-
 
         public string Name
         { get { return name; } }

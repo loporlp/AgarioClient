@@ -249,8 +249,6 @@ namespace ClientGUI
                     }
                 }
             }
-
-
             PlaySurface.Invalidate();
         }
 
@@ -273,12 +271,12 @@ namespace ClientGUI
         /// <param name="e"> unused </param>
         private void SpacePressed(object state, TextChangedEventArgs e)
         {
-            if(keyPress.Text.Contains(" "))
+            if (keyPress.Text.Contains(" "))
             {
                 split = true;
             }
             keyPress.Text = "";
-            
+
         }
 
     }

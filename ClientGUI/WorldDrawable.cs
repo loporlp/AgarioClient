@@ -56,7 +56,7 @@ namespace ClientGUI
                 this.activePlayer = world.players[playerID];
             }
 
-            catch(KeyNotFoundException)
+            catch (KeyNotFoundException)
             {
                 world.alive = false;
             }
@@ -65,9 +65,9 @@ namespace ClientGUI
 
 
             canvas.FillColor = Color.FromInt(activePlayer.ARGBColor);
-            canvas.FillCircle(250-activePlayer.Radius, 250-activePlayer.Radius, activePlayer.Mass/10);
+            canvas.FillCircle(250 - activePlayer.Radius, 250 - activePlayer.Radius, activePlayer.Mass / 10);
             canvas.FontColor = Colors.White;
-            canvas.DrawString(activePlayer.Name, 250-activePlayer.Radius, 250, HorizontalAlignment.Center);
+            canvas.DrawString(activePlayer.Name, 250 - activePlayer.Radius, 250, HorizontalAlignment.Center);
 
 
             Vector2 playerPosition = activePlayer.Position;
@@ -81,12 +81,12 @@ namespace ClientGUI
             {
                 foreach (Food food in world.food.Values)
                 {
-                   if((food.X < playerPosition.X + 250 && food.X > playerPosition.X - 250) && (food.Y < playerPosition.Y + 250 && food.Y > playerPosition.Y - 250))
-                   {
+                    if ((food.X < playerPosition.X + 250 && food.X > playerPosition.X - 250) && (food.Y < playerPosition.Y + 250 && food.Y > playerPosition.Y - 250))
+                    {
                         canvas.FillColor = Color.FromInt(food.ARGBColor);
                         canvas.FillCircle(food.Position.X - topLeftCorner.X, food.Position.Y - topLeftCorner.Y, food.Mass / 10);
-                   }
-                    
+                    }
+
                 }
             }
 
@@ -98,7 +98,7 @@ namespace ClientGUI
                     if ((player.X < playerPosition.X + 250 && player.X > playerPosition.X - 250) && (player.Y < playerPosition.Y + 250 && player.Y > playerPosition.Y - 250) && player.ID != activePlayer.ID)
                     {
                         canvas.FillColor = Color.FromInt(player.ARGBColor);
-                        canvas.FillCircle(player.Position.X - topLeftCorner.X, player.Position.Y - topLeftCorner.Y, player.Mass/10);
+                        canvas.FillCircle(player.Position.X - topLeftCorner.X, player.Position.Y - topLeftCorner.Y, player.Mass / 10);
                         canvas.FontColor = Colors.White;
                         canvas.DrawString(player.Name, player.Position.X - topLeftCorner.X, player.Position.Y - topLeftCorner.Y + player.Radius, HorizontalAlignment.Center);
                     }
@@ -106,9 +106,13 @@ namespace ClientGUI
             }
         }
 
+        /// <summary>
+        ///     Sets the ID of the player playing
+        /// </summary>
+        /// <param name="id"> id to set </param>
         public void setPlayer(long id)
         {
-            playerID = id; 
+            playerID = id;
             playerSet = true;
 
         }

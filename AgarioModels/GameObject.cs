@@ -35,15 +35,13 @@ namespace AgarioModels
 
         public Vector2 Position { get { return position; } set { position = value; } }
 
-        public float Mass { get { return mass; } set { mass = value;} } 
+        public float Mass { get { return mass; } set { mass = value; } }
 
         public float X { get { return position.X; } }
 
         public float Y { get { return position.Y; } }
 
         public int ARGBColor { get { return color; } set { color = value; } }
-
-
 
         public float Radius { get { return (float)Math.Sqrt(mass / (Math.PI)); } }
 
