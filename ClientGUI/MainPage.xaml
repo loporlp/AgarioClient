@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ClientGUI.MainPage">
+             x:Class="ClientGUI.MainPage"
+             Title = "Agario"
+             HeightRequest="1000">
     <StackLayout>
         
         <VerticalStackLayout IsVisible="true" x:Name="LoginPage" VerticalOptions="Center"  Spacing="50">
@@ -28,22 +30,28 @@
             IsVisible="false"
             x:Name="Game">
 
-
-            <GraphicsView 
+            <HorizontalStackLayout>
+                <GraphicsView 
                 x:Name="PlaySurface"
                 VerticalOptions="Center"
                 BackgroundColor="Blue"
                 HeightRequest="500"
-                WidthRequest="500">
-                <GraphicsView.GestureRecognizers>
-                    <PointerGestureRecognizer PointerMoved="PointerMoved"/>
-                </GraphicsView.GestureRecognizers>
-                
-            </GraphicsView>
+                WidthRequest="500"
+                HorizontalOptions="Center">
+                    <GraphicsView.GestureRecognizers>
+                        <PointerGestureRecognizer PointerMoved="PointerMoved"/>
+                    </GraphicsView.GestureRecognizers>
+                    
 
 
-            <Button x:Name="restart" Pressed="OnRestart" IsVisible="False" WidthRequest="300" Text="Restart"></Button>
+                </GraphicsView>
+                <Button x:Name="restart" Pressed="OnRestart" IsVisible="False" WidthRequest="300" Text="Restart" HorizontalOptions="Start"/>
+            </HorizontalStackLayout>
             
+
+            <Entry x:Name="keyPress" IsVisible="true" TextChanged="SpacePressed" ScaleX=".00001" ScaleY=".00001"/>
+
+
         </VerticalStackLayout>
         
     </StackLayout>

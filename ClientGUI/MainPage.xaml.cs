@@ -33,6 +33,7 @@ namespace ClientGUI
         private readonly float screenHeight;
         private readonly ILogger<MainPage> _logger;
         private World world;
+        private bool split;
 
         public MainPage(ILogger<MainPage> logger)
         {
@@ -166,12 +167,15 @@ namespace ClientGUI
         /// <param name="channel"></param>
         void onDisconnect(Networking channel)
         {
-
+            LoginPage.IsVisible = true;
+            Game.IsVisible = false;
         }
 
         private void OnRestart(object sender, EventArgs e)
         {
-            //add restart implementation here 
+            channel.Send(String.Format(Protocols.CMD_Start_Game, PlayerName.Text));
+            world.alive = true;
+            restart.IsVisible = false;
         }
 
 
@@ -232,8 +236,21 @@ namespace ClientGUI
                 float xToMove = (float)(pos.Value.X / screenWidth) * world.width;
                 float yToMove = (float)(pos.Value.Y / screenHeight) * world.height;
 
+
                 channel.Send(String.Format(Protocols.CMD_Move, (int)xToMove, (int)yToMove));
+
+                keyPress.Focus();
+                if (split)
+                {
+                    split = false;
+                    if (world.players[playerID].Mass >= 1000)
+                    {
+                        channel.Send(String.Format(Protocols.CMD_Split, xToMove, yToMove));
+                    }
+                }
             }
+
+
             PlaySurface.Invalidate();
         }
 
@@ -245,7 +262,23 @@ namespace ClientGUI
         private void PointerMoved(object state, PointerEventArgs e)
         {
             pos = e.GetPosition(PlaySurface);
-           _logger.LogTrace($"Pointer at {pos.Value.X},{pos.Value.Y}");
+            _logger.LogTrace($"Pointer at {pos.Value.X},{pos.Value.Y}");
+        }
+
+        /// <summary>
+        ///     Runs when space is pressed on the 
+        ///     focused entry
+        /// </summary>
+        /// <param name="state"> unused </param>
+        /// <param name="e"> unused </param>
+        private void SpacePressed(object state, TextChangedEventArgs e)
+        {
+            if(keyPress.Text.Contains(" "))
+            {
+                split = true;
+            }
+            keyPress.Text = "";
+            
         }
 
     }

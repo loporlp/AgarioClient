@@ -106,19 +106,6 @@ namespace ClientGUI
             }
         }
 
-        /// <summary>
-        ///     Helper method to convert world coordinates to screen coordinates
-        /// </summary>
-        /// <param name="X"> x position </param>
-        /// <param name="Y"> y position </param>
-        /// <returns></returns>
-        public Vector2 getScreenPosition(float X, float Y)
-        {
-            float screenX = (X / world.width) * screenWidth;
-            float screenY = (Y / world.height) * screenHeight;
-            return new Vector2(screenX, screenY);
-        }
-
         public void setPlayer(long id)
         {
             playerID = id; 
